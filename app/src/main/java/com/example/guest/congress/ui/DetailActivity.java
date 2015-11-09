@@ -112,9 +112,16 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mozawa92@gmail.com"});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Cool photo I took");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Yo check out this photo! I support you!");
+                emailIntent.putExtra(Intent.EXTRA_STREAM, mCurrentPhotoPath);
 
-
-
+                if (isIntentSafe(emailIntent)) {
+                    startActivity(emailIntent);
+                }
             }
         });
     }
@@ -163,6 +170,7 @@ public class DetailActivity extends AppCompatActivity {
         );
         //Save file path
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        Log.d(TAG, mCurrentPhotoPath);
         return image;
     }
 

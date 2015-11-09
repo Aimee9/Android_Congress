@@ -103,7 +103,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="1313 Mockingbird Lane"
         android:id="@+id/officeText"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="19dp"
         android:textSize="18sp"
         android:layout_below="@+id/websiteText"
         android:layout_alignRight="@+id/emailText"
