@@ -5,8 +5,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +31,7 @@ public class DetailActivity extends AppCompatActivity {
     @Bind(R.id.phoneText) TextView mPhoneText;
     @Bind(R.id.officeText) TextView mOfficeText;
     @Bind(R.id.websiteText) TextView mWebsiteText;
+    @Bind(R.id.addressButton) Button mAddressButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,8 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
         final String number = bundle.getString("phone");
+        final String address = bundle.getString("office");
+        final String zipcode = bundle.getString("zipcode");
 
         mTitleText.setText(bundle.getString("title"));
         mFirstNameText.setText(bundle.getString("first_name"));
@@ -60,16 +63,36 @@ public class DetailActivity extends AppCompatActivity {
         mPhoneText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Build the intent
                 Uri phoneNumber = Uri.parse("tel:" + number);
                 Intent callIntent = new Intent(Intent.ACTION_DIAL, phoneNumber);
 
+                // Verify
                 PackageManager packageManager = getPackageManager();
                 List activities = packageManager.queryIntentActivities(callIntent, PackageManager.MATCH_DEFAULT_ONLY);
                 boolean isIntentSafe = activities.size() > 0;
 
-                if(isIntentSafe) {
+                // Execute
+                if (isIntentSafe) {
                     startActivity(callIntent);
+                }
+            }
+        });
+
+        mAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String addressWithPlus = (address.replace(" ", "+"));
+                Uri address = Uri.parse("geo:0,0?q=" + addressWithPlus + ",+" + zipcode);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, address);
+
+                // Verify
+                PackageManager packageManager = getPackageManager();
+                List activities = packageManager.queryIntentActivities(mapIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                boolean isIntentSafe = activities.size() > 0;
+
+                // Execute
+                if (isIntentSafe) {
+                    startActivity(mapIntent);
                 }
             }
         });

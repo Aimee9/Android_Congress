@@ -93,7 +93,8 @@
         android:textSize="18sp"
         android:autoText="true"
         android:textColor="#1526ff"
-        android:textIsSelectable="false"/>
+        android:textIsSelectable="false"
+        android:padding="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -101,10 +102,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="1313 Mockingbird Lane"
         android:id="@+id/officeText"
-        android:layout_below="@+id/phoneText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp"
-        android:textSize="18sp"/>
+        android:layout_marginTop="42dp"
+        android:textSize="18sp"
+        android:layout_below="@+id/websiteText"
+        android:layout_alignRight="@+id/emailText"
+        android:layout_alignEnd="@+id/emailText"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -112,9 +114,18 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="thatguy.com"
         android:id="@+id/websiteText"
+        android:textSize="18sp"
+        android:layout_below="@+id/phoneText"
+        android:layout_alignLeft="@+id/addressButton"
+        android:layout_alignStart="@+id/addressButton"
+        android:layout_marginTop="46dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map to Address"
+        android:id="@+id/addressButton"
         android:layout_below="@+id/officeText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp"
-        android:textSize="18sp"/>
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

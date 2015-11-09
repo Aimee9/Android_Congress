@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,8 +26,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import butterknife.ButterKnife;
 
 public class LegislatorsActivity extends ListActivity {
     public static final String TAG = LegislatorsActivity.class.getSimpleName();
@@ -171,6 +168,7 @@ public class LegislatorsActivity extends ListActivity {
         bundle.putString("phone", thisLegislator.getPhone());
         bundle.putString("office", thisLegislator.getOffice());
         bundle.putString("website", thisLegislator.getWebsite());
+        bundle.putString("zipcode", mZipcode);
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtras(bundle);
