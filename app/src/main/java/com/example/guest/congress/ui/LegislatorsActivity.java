@@ -56,20 +56,6 @@ public class LegislatorsActivity extends ListActivity {
         Runnable displayInfo = new Runnable() {
             @Override
             public void run() {
-                /*  Old way of populating before using ListAdapter
-                mLegislatorList = new ArrayList<String>();
-                for (Legislator legislator : mLegislators) {
-                    String firstName = legislator.getFirstName();
-                    String lastName = legislator.getLastName();
-                    String party = legislator.getParty();
-                    String title = legislator.getTitle();
-
-                    String info = title + " " + firstName + " " + lastName + "  (" + party + ")";
-                    mLegislatorList.add(info);
-                }
-
-                mAdapter=new ArrayAdapter<String>(LegislatorsActivity.this, android.R.layout.simple_list_item_1, mLegislatorList);
-                */
 
                 mAdapter = new ListAdapter(LegislatorsActivity.this, mLegislators);
                 setListAdapter(mAdapter);

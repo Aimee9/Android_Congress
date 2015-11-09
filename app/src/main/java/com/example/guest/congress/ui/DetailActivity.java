@@ -1,26 +1,26 @@
 package com.example.guest.congress.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.guest.congress.R;
 import com.koushikdutta.ion.Ion;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private static final String TAG = DetailActivity.class.getSimpleName();
 
     @Bind(R.id.photoImage)ImageView mPhotoImage;
     @Bind(R.id.titleText)TextView mTitleText;
@@ -40,6 +40,7 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         Bundle bundle = intent.getExtras();
+        final String number = bundle.getString("phone");
 
         mTitleText.setText(bundle.getString("title"));
         mFirstNameText.setText(bundle.getString("first_name"));
@@ -55,6 +56,23 @@ public class DetailActivity extends AppCompatActivity {
                 //.placeholder(R.drawable.person)
                 .load(photoUrl);
 
+
+        mPhoneText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Build the intent
+                Uri phoneNumber = Uri.parse("tel:" + number);
+                Intent callIntent = new Intent(Intent.ACTION_DIAL, phoneNumber);
+
+                PackageManager packageManager = getPackageManager();
+                List activities = packageManager.queryIntentActivities(callIntent, PackageManager.MATCH_DEFAULT_ONLY);
+                boolean isIntentSafe = activities.size() > 0;
+
+                if(isIntentSafe) {
+                    startActivity(callIntent);
+                }
+            }
+        });
     }
 
 }
