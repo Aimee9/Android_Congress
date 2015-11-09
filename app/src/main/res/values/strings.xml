@@ -10,4 +10,5 @@
     <string name="Network_Unavailable">Network Unavailable.  Please try again later.</string>
     <string name="exception_caught">"Exception caught: "</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="alert_error">Error: You suck</string>
 </resources>

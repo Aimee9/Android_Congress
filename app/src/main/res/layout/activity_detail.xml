@@ -79,7 +79,8 @@
         android:id="@+id/emailText"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textColor="#1526ff"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -109,16 +110,18 @@
         android:layout_alignEnd="@+id/emailText"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="thatguy.com"
         android:id="@+id/websiteText"
         android:textSize="18sp"
+        android:layout_marginTop="44dp"
         android:layout_below="@+id/phoneText"
-        android:layout_alignLeft="@+id/addressButton"
-        android:layout_alignStart="@+id/addressButton"
-        android:layout_marginTop="46dp"/>
+        android:textAlignment="gravity"
+        android:gravity="center"
+        android:textColor="#1526ff"
+        android:padding="8dp"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -126,6 +129,14 @@
         android:text="Map to Address"
         android:id="@+id/addressButton"
         android:layout_below="@+id/officeText"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take a photo and send to:"
+        android:id="@+id/emailLabel"
+        android:layout_above="@+id/emailText"
         android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

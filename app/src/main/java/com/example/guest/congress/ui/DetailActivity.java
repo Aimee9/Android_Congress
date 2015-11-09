@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +16,10 @@ import android.widget.TextView;
 import com.example.guest.congress.R;
 import com.koushikdutta.ion.Ion;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -44,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
         final String number = bundle.getString("phone");
         final String address = bundle.getString("office");
         final String zipcode = bundle.getString("zipcode");
+        final String website = bundle.getString("website");
 
         mTitleText.setText(bundle.getString("title"));
         mFirstNameText.setText(bundle.getString("first_name"));
@@ -66,13 +74,8 @@ public class DetailActivity extends AppCompatActivity {
                 Uri phoneNumber = Uri.parse("tel:" + number);
                 Intent callIntent = new Intent(Intent.ACTION_DIAL, phoneNumber);
 
-                // Verify
-                PackageManager packageManager = getPackageManager();
-                List activities = packageManager.queryIntentActivities(callIntent, PackageManager.MATCH_DEFAULT_ONLY);
-                boolean isIntentSafe = activities.size() > 0;
-
                 // Execute
-                if (isIntentSafe) {
+                if (isIntentSafe(callIntent)) {
                     startActivity(callIntent);
                 }
             }
@@ -85,17 +88,88 @@ public class DetailActivity extends AppCompatActivity {
                 Uri address = Uri.parse("geo:0,0?q=" + addressWithPlus + ",+" + zipcode);
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, address);
 
-                // Verify
-                PackageManager packageManager = getPackageManager();
-                List activities = packageManager.queryIntentActivities(mapIntent, PackageManager.MATCH_DEFAULT_ONLY);
-                boolean isIntentSafe = activities.size() > 0;
-
                 // Execute
-                if (isIntentSafe) {
+                if (isIntentSafe(mapIntent)) {
                     startActivity(mapIntent);
                 }
             }
         });
+
+        mWebsiteText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri websiteLink = Uri.parse(website);
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, websiteLink);
+
+                // Execute
+                if (isIntentSafe(websiteIntent)) {
+                    startActivity(websiteIntent);
+                }
+            }
+        });
+
+        mEmailText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();
+
+
+
+            }
+        });
+    }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                Log.d(TAG, "Could not create an image file.");
+            }
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            Log.d(TAG, "We're inside onActivityResult!");
+//
+//        }
+//    }
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        //Create image file name
+        String timestamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timestamp;
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        //Save file path
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
+    private boolean isIntentSafe(Intent intent) {
+        PackageManager packageManager = getPackageManager();
+        List activities = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return activities.size() > 0;
     }
 
 }
