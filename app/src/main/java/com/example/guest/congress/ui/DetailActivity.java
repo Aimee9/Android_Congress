@@ -112,16 +112,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.setType("text/plain");
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mozawa92@gmail.com"});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Cool photo I took");
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Yo check out this photo! I support you!");
-                emailIntent.putExtra(Intent.EXTRA_STREAM, mCurrentPhotoPath);
 
-                if (isIntentSafe(emailIntent)) {
-                    startActivity(emailIntent);
-                }
             }
         });
     }
@@ -146,15 +137,22 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            Log.d(TAG, "We're inside onActivityResult!");
-//
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("text/plain");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"mozawa92@gmail.com"});
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Cool photo I took");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Yo check out this photo! I support you!");
+            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(mCurrentPhotoPath));
+
+            if (isIntentSafe(emailIntent)) {
+                startActivity(emailIntent);
+            }
+
+        }
+    }
 
     String mCurrentPhotoPath;
 
@@ -169,10 +167,11 @@ public class DetailActivity extends AppCompatActivity {
                 storageDir
         );
         //Save file path
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath = "file://" + image.getAbsolutePath();
         Log.d(TAG, mCurrentPhotoPath);
         return image;
     }
+
 
     private boolean isIntentSafe(Intent intent) {
         PackageManager packageManager = getPackageManager();
